@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b20">
+<title>Moonlit Chapter 24 — A Story Written Just for You</title>
+<style>
+:root{--ink:#f8f3ff;--muted:#c7c5df;--pink:#f4a9d1;--gold:#f4d9a0;--glass:rgba(10,12,34,.82);--line:rgba(255,255,255,.16)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#080a1b;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+body{overflow:hidden}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#game{position:relative;isolation:isolate;width:100%;height:100dvh;min-height:520px;overflow:hidden;background:#0b1028}
+#backdrop{position:absolute;inset:0;z-index:-4;transition:background 1s ease}
+#backdrop:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 70% 23%,rgba(115,94,178,.22),transparent 40%),linear-gradient(180deg,rgba(5,8,26,.05),rgba(5,8,26,.15) 45%,rgba(5,8,26,.9))}
+#backdrop:after{content:"";position:absolute;inset:0;opacity:.32;background-image:radial-gradient(1px 1px at 8% 12%,#fff 99%,transparent),radial-gradient(1px 1px at 27% 27%,#fff 99%,transparent),radial-gradient(2px 2px at 48% 11%,#fff 99%,transparent),radial-gradient(1px 1px at 67% 18%,#fff 99%,transparent),radial-gradient(1px 1px at 84% 31%,#fff 99%,transparent),radial-gradient(2px 2px at 93% 8%,#fff 99%,transparent),radial-gradient(1px 1px at 17% 47%,#fff 99%,transparent),radial-gradient(1px 1px at 75% 49%,#fff 99%,transparent);background-size:100% 100%}
+#game[data-bg="intro"] #backdrop{background:linear-gradient(135deg,#171b46,#29234c 45%,#10152e)}
+#game[data-bg="observatory"] #backdrop{background:radial-gradient(ellipse at 75% 24%,#f3d9ad 0 3%,transparent 3.5%),linear-gradient(160deg,#17274b,#5a477c 55%,#10132c)}
+#game[data-bg="memory"] #backdrop{background:radial-gradient(ellipse at 20% 40%,#c57ea555,transparent 40%),linear-gradient(150deg,#182445,#50365d 60%,#10142d)}
+#game[data-bg="letter"] #backdrop{background:radial-gradient(ellipse at 50% 20%,#514176,#171b3c 65%,#090b20)}
+#game[data-bg="ending"] #backdrop{background:radial-gradient(ellipse at 50% 15%,#7b567d,#252344 55%,#090b20)}
+.top{position:absolute;top:0;left:0;right:0;height:68px;padding:0 clamp(16px,4vw,52px);display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(180deg,rgba(5,7,22,.72),transparent);z-index:10}
+.logo{font:11px/1.4 Arial,sans-serif;letter-spacing:.22em;color:#f5d9a0;text-transform:uppercase}.chapterNo{font:11px Arial,sans-serif;color:#c9c4e7;letter-spacing:.14em}
+.tools{display:flex;gap:8px}.tool{border:1px solid var(--line);background:rgba(14,17,44,.62);padding:9px 12px;border-radius:24px;font:11px Arial,sans-serif;color:#f6eaf8;backdrop-filter:blur(8px)}
+.scene-label{position:absolute;top:84px;left:clamp(18px,5vw,70px);font:10px Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#e8c7e4;z-index:2}
+.moon{position:absolute;right:13%;top:14%;width:clamp(85px,12vw,160px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff9df,#f2dcae 55%,#d5b8da);box-shadow:0 0 70px #e4c5ed44,0 0 150px #b4a5ef22;opacity:.86}
+#sceneDecor{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.city{position:absolute;bottom:0;left:0;right:0;height:28%;opacity:.48;background:linear-gradient(180deg,transparent,#090b20 70%),repeating-linear-gradient(90deg,transparent 0 5%,#121632 5% 7%,transparent 7% 10%);clip-path:polygon(0 42%,5% 42%,5% 20%,11% 20%,11% 55%,16% 55%,16% 34%,23% 34%,23% 9%,29% 9%,29% 48%,37% 48%,37% 26%,44% 26%,44% 60%,53% 60%,53% 18%,60% 18%,60% 45%,69% 45%,69% 29%,76% 29%,76% 53%,83% 53%,83% 13%,90% 13%,90% 39%,100% 39%,100% 100%,0 100%)}
+#characterWrap{position:absolute;z-index:2;left:50%;bottom:clamp(120px,20vh,205px);height:min(76vh,780px);width:min(70vw,720px);transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center;pointer-events:none;transition:transform .5s,opacity .4s}
+#character{height:100%;width:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 26px #08081766);transition:filter .3s,transform .3s;animation:appear .65s both}
+@keyframes appear{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+#characterWrap[data-expression="happy"] #character{filter:drop-shadow(0 0 26px #f7b5dc55);transform:translateY(-2px)}
+#characterWrap[data-expression="surprised"] #character{filter:drop-shadow(0 0 28px #b6d5ff66);transform:scale(1.015)}
+#characterWrap[data-expression="annoyed"] #character{filter:drop-shadow(0 0 20px #ff9b9b44);transform:rotate(-.5deg)}
+#characterWrap[data-expression="soft"] #character{filter:drop-shadow(0 0 30px #ffc8e855)}
+#dialogueArea{position:absolute;z-index:5;left:0;right:0;bottom:0;padding:0 clamp(12px,4vw,56px) clamp(12px,2.4vh,24px)}
+.dialogue{position:relative;max-width:1100px;margin:auto;min-height:190px;padding:30px clamp(20px,4vw,48px) 22px;border:1px solid rgba(255,255,255,.2);border-radius:15px;background:linear-gradient(120deg,rgba(8,11,34,.94),rgba(22,20,52,.89));box-shadow:0 18px 60px #0007;backdrop-filter:blur(15px)}
+.dialogue:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--pink),var(--gold));border-radius:15px 0 0 15px}
+.nameplate{position:absolute;left:28px;top:-15px;padding:7px 20px;background:linear-gradient(90deg,#8f4d83,#523d76);border:1px solid #f6c3e0aa;border-radius:4px;font:11px Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;box-shadow:0 4px 16px #0005}
+#dialogueText{font-size:clamp(16px,2vw,22px);line-height:1.65;white-space:pre-line;color:#f7f0ff;min-height:70px}
+#narration{font-size:clamp(14px,1.6vw,18px);line-height:1.65;color:#d3d0e9;white-space:pre-line}
+#choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.choice{border:1px solid rgba(198,177,240,.34);background:linear-gradient(100deg,rgba(52,43,85,.78),rgba(22,27,59,.9));padding:12px 15px;text-align:left;border-radius:7px;font:14px/1.45 Arial,sans-serif;color:#f6efff;transition:background .2s,border .2s,transform .2s}
+.choice:hover{background:rgba(117,69,119,.65);border-color:#f3b9dc;transform:translateY(-2px)}
+.continue{position:absolute;right:20px;bottom:15px;font:10px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#d9c4e5;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.35}}
+#dialogueArea.has-choices .dialogue{padding-bottom:26px}
+#dialogueArea.has-choices .continue{display:none}
+#letterPanel{display:none;position:absolute;z-index:8;inset:78px 0 0;align-items:center;justify-content:center;padding:20px;overflow:auto;background:#07091bd9;backdrop-filter:blur(12px)}
+.letter{width:min(720px,100%);max-height:100%;overflow:auto;background:#f8edda;color:#3c2b43;padding:clamp(22px,5vw,48px);border-radius:5px;box-shadow:0 20px 90px #0009;line-height:1.8;font-size:16px;white-space:pre-line;position:relative}
+.letter:before{content:"PERSONAL MESSAGE · MIRA";display:block;text-align:center;font:10px Arial,sans-serif;letter-spacing:.22em;color:#8d5a83;margin-bottom:20px}
+.letter h2{text-align:center;font-size:clamp(25px,4vw,38px);font-weight:normal;color:#7e426f;margin:0 0 18px}
+.letter .sign{text-align:right;color:#8d4f7d;font-style:italic}
+#titleScreen{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:linear-gradient(180deg,#07091b55,#07091b8f)}
+.title-card{max-width:720px}.eyebrow{font:10px Arial,sans-serif;letter-spacing:.3em;color:var(--gold)}h1{font-size:clamp(38px,8vw,76px);line-height:1.03;font-weight:normal;margin:20px 0 14px;color:#fff1fa;text-shadow:0 5px 30px #e6b7ff33}.subtitle{color:#d8cde9;font-size:clamp(15px,2vw,20px);font-style:italic;line-height:1.6}.start{margin-top:32px;border:1px solid #f7d9a0;background:linear-gradient(120deg,#f4d9a0,#f2b9d7);color:#23172f;padding:14px 35px;border-radius:3px;font:11px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;box-shadow:0 0 35px #f3c6e533}.title-foot{margin-top:25px;font:10px Arial,sans-serif;letter-spacing:.18em;color:#b7b4d5}
+#pausePanel{display:none;position:absolute;inset:0;z-index:30;background:#07091bd9;backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:24px}
+.pause-card{width:min(360px,100%);padding:28px;border:1px solid var(--line);background:#141631;border-radius:12px;text-align:center}.pause-card h2{font-weight:normal}.pause-card button{display:block;width:100%;margin-top:10px;padding:12px;border:1px solid var(--line);background:#252344;border-radius:6px}
+#toast{position:absolute;z-index:40;top:78px;left:50%;transform:translateX(-50%);padding:10px 16px;background:#171a38;border:1px solid var(--line);border-radius:24px;font:12px Arial,sans-serif;color:#f5e8f5;opacity:0;pointer-events:none;transition:opacity .3s}
+@media(min-width:1000px){#characterWrap{left:31%;width:min(52vw,650px);bottom:clamp(115px,18vh,180px)}.dialogue{margin-left:25%;max-width:850px}}
+@media(max-width:620px){#game{min-height:560px}.top{height:58px}.logo{font-size:9px;letter-spacing:.13em}.chapterNo{display:none}.tool{padding:8px 9px;font-size:10px}.scene-label{top:72px;font-size:9px}#characterWrap{width:100vw;height:58vh;bottom:clamp(210px,32vh,300px);left:50%}.moon{right:10%;top:14%;width:80px}#dialogueArea{padding:0 9px 9px}.dialogue{padding:27px 17px 19px;min-height:170px;border-radius:11px}.nameplate{left:18px}#dialogueText{font-size:16px;min-height:55px}.choice{font-size:12px;padding:11px 10px}#choices{gap:7px;margin-top:12px}.continue{right:12px;bottom:9px;font-size:9px}.city{height:25%}}
+@media(max-height:650px) and (min-width:621px){#characterWrap{height:62vh;bottom:175px}.dialogue{min-height:145px;padding-top:25px}#dialogueText{font-size:16px;min-height:45px}}
+</style>
+</head>
+<body>
+<div id="game" data-bg="intro">
+ <div id="backdrop"></div><div id="sceneDecor"><div class="moon"></div><div class="city"></div></div>
+ <header class="top">
+  <div class="logo">✦ Moonlit Chapter 24</div><div class="chapterNo" id="chapterNo">PROLOGUE · 01 / 06</div>
+  <div class="tools"><button class="tool" id="musicBtn">♫ MUSIC</button><button class="tool" id="autoBtn">AUTO</button><button class="tool" id="saveBtn">SAVE</button><button class="tool" id="menuBtn">MENU</button></div>
+ </header>
+ <div class="scene-label" id="sceneLabel">A story written just for you</div>
+ <div id="characterWrap" data-expression="soft"><img id="character" src="assets/character.png" alt="Anime girl character"></div>
+ <section id="dialogueArea">
+  <div class="dialogue"><div class="nameplate" id="speaker">NARRATION</div><div id="narration"></div><div id="dialogueText"></div><div id="choices"></div><div class="continue" id="continueHint">CLICK TO CONTINUE ▸</div></div>
+ </section>
+ <section id="letterPanel"><article class="letter"><h2>Happy 24th Birthday, Bader ♡</h2><div id="letterText"></div><p class="sign">With love and care,<br>Mira ♡</p><button class="start" id="closeLetter">RETURN TO THE STARS</button></article></section>
+ <section id="titleScreen"><div class="title-card"><div class="eyebrow">A BIRTHDAY VISUAL NOVEL · 18 NOVEMBER 2026</div><h1>Moonlit<br>Chapter 24</h1><div class="subtitle">Every choice tells a story.<br>Every memory leaves a little light.</div><button class="start" id="startBtn">Begin your story</button><div class="title-foot">A LITTLE UNIVERSE MADE ESPECIALLY FOR BADER</div></div></section>
+ <section id="pausePanel"><div class="pause-card"><div class="eyebrow">SYSTEM MENU</div><h2>Take a little pause.</h2><button id="resumeBtn">Continue story</button><button id="quickSaveBtn">Save progress</button><button id="restartBtn">Restart from the beginning</button><button id="menuBackBtn">Back to title screen</button></div></section>
+ <div id="toast"></div>
+</div>
+<audio id="bgMusic" loop preload="none"><source src="assets/sweater-weather.mp3" type="audio/mpeg"></audio>
+<script>
+const $=id=>document.getElementById(id);
+const letter=`Happy 24th birthday, Bader.
+
+I hope this new chapter is gentle with you. I hope it brings you peaceful days, little victories, unexpected laughter, and people who appreciate you for exactly who you are.
+
+When I think about the memories we've made, I don't only think about big events. I think about the random conversations, the jokes that made no sense to anyone else, the moments we talked about absolutely nothing and somehow made the day feel lighter. Those little moments have a special place in my heart.
+
+Thank you for being part of my life and for all the memories we've collected so far. I can't predict what the next chapters will look like, but I hope there will be many more: more laughter, more silly moments, more late conversations, and more reasons to look back and smile.
+
+Please remember to give yourself credit for how far you've come. You deserve rest, happiness, peace, and days that feel lighter. You don't have to figure everything out all at once.
+
+This game is a small gift, but I made it with care because I wanted your birthday to have something personal — something that is yours to revisit whenever you need a little reminder that the world still holds warm moments.
+
+Here's to your 24th chapter, to the memories behind you, and to all the stories you haven't lived yet.
+
+Happy birthday, Bader. I'm glad our paths crossed. ♡`;
+const scenes={
+ intro:{chapter:"PROLOGUE · 01 / 06",bg:"intro",label:"A story written just for you",speaker:"NARRATION",n:"The night sky is unusually bright. A small notification appears on your screen, even though you don't remember giving this mysterious world your name.\n\nBader, this story is yours. There are no wrong answers here — only little paths through a night made for your birthday.",d:"A new story has begun.",face:"soft",next:"meet"},
+ meet:{chapter:"PROLOGUE · 02 / 06",bg:"observatory",label:"Somewhere beneath the moon",speaker:"HER",n:"A girl with orange hair turns toward you. The moonlight catches the edges of her red suit, and a playful smile appears on her face.",d:"“Oh, there you are. I was starting to think you'd leave me talking to the moon.”",face:"happy",choices:[["“You missed me that much?”","tease"],["“Sorry to keep you waiting. Where are we?”","gentle"],["“First tell me who you are.”","mystery"]]},
+ tease:{chapter:"CHAPTER 01 · 03 / 06",bg:"observatory",label:"A familiar kind of trouble",speaker:"HER",n:"She tilts her head, looking far too pleased with herself. Somewhere above, a star flickers as if it's laughing too.",d:"“Don't get full of yourself, Bader. I was just making sure my favourite troublemaker hadn't gotten lost.”",face:"wink",choices:[["“Favourite? I want that in writing.”","memories"],["“You could just say you missed me.”","heart"],["“I am absolutely getting full of myself.”","laugh"]]},
+ gentle:{chapter:"CHAPTER 01 · 03 / 06",bg:"memory",label:"A place to breathe",speaker:"HER",n:"Her teasing expression softens. For a moment, the world feels quiet — no deadlines, no noise, nothing you have to prove.",d:"“It's a little place outside ordinary time. Tonight, you don't have to carry everything by yourself.”",face:"gentle",choices:[["“That sounds nice, actually.”","heart"],["“You make it sound like home.”","memories"],["“You're explaining the moon later.”","laugh"]]},
+ mystery:{chapter:"CHAPTER 01 · 03 / 06",bg:"observatory",label:"A suspicious guide",speaker:"HER",n:"She puts a hand on her hip and gives you a wonderfully dramatic look. The tiny smile she's trying to hide ruins the effect.",d:"“I'm your guide for tonight. And no, I won't reveal the whole plot at once. Where would the fun be?”",face:"annoyed",choices:[["“I respect the commitment to drama.”","laugh"],["“Fine. Lead the way.”","heart"],["“This is a birthday trap, isn't it?”","envelope"]]},
+ memories:{chapter:"CHAPTER 02 · 04 / 06",bg:"memory",label:"Little things that stay",speaker:"HER",n:"The stars seem to turn into tiny lights, like moments saved in the back of your mind: random conversations, jokes that made no sense to anyone else, and messages that made a difficult day feel lighter.",d:"“Funny how some memories don't look important while they're happening. Then one day, you remember them and smile without even noticing.”",face:"gentle",choices:[["“The random moments are the best ones.”","heart"],["“You're being unusually sentimental.”","laugh"],["“I hope we make a lot more.”","wish"]]},
+ heart:{chapter:"CHAPTER 02 · 04 / 06",bg:"memory",label:"A small, honest truth",speaker:"HER",n:"She looks up at the moon. Her voice is quieter now, but not sad — just honest.",d:"“I think the good stuff is made from ordinary things: being able to talk, laugh, be weird, and show up as yourself. I hope you get more of that this year.”",face:"gentle",choices:[["“I'll take that wish.”","wish"],["“You planned a whole speech, didn't you?”","laugh"],["“Thanks for being here.”","envelope"]]},
+ laugh:{chapter:"CHAPTER 02 · 04 / 06",bg:"observatory",label:"Officially unserious",speaker:"HER",n:"She bursts out laughing, then tries to recover her dignity. She fails almost immediately.",d:"“I was trying to be profound! You're impossible. Honestly, never change that part of you.”",face:"happy",choices:[["“No promises.”","tease"],["“You love my excellent timing.”","memories"],["“Okay, one sincere moment: thank you.”","envelope"]]},
+ wish:{chapter:"CHAPTER 03 · 05 / 06",bg:"ending",label:"A wish for your next chapter",speaker:"HER",n:"The sky seems a little less distant now. A new constellation appears, shaped like a tiny open book.",d:"“I can't promise every day will be easy. But I hope this next chapter brings you peace, reasons to laugh, people who appreciate you, and memories you haven't made yet.”",face:"happy",choices:[["“That's a pretty good wish.”","envelope"],["“Show me what's in that envelope.”","envelope"]]},
+ envelope:{chapter:"FINAL CHAPTER · 06 / 06",bg:"letter",label:"One last little surprise",speaker:"HER",n:"A soft chime echoes through the night. A little envelope appears, glowing at the edges. Your name is written on it.",d:"“This part is yours to open, Bader. Someone wanted to make today a little more special.”",face:"happy",choices:[["Open the letter addressed to me","finish"]]},
+ finish:{chapter:"EPILOGUE · FOR BADER",bg:"ending",label:"A message from Mira",speaker:"SYSTEM",n:"The stars grow quiet. The story gives way to a letter written just for you.",d:"✉ One new message · From Mira · Open when you're ready.",face:"gentle",choices:[["Read your birthday letter","letter"]]}
+};
+let current="intro", started=false, auto=false, autoTimer=null;
+function toast(msg){$("toast").textContent=msg;$("toast").style.opacity=1;setTimeout(()=>$("toast").style.opacity=0,1700)}
+function draw(key){
+ current=key; const s=scenes[key]; if(!s)return;
+ $("game").dataset.bg=s.bg;$("chapterNo").textContent=s.chapter;$("sceneLabel").textContent=s.label;
+ $("speaker").textContent=s.speaker;$("narration").textContent=s.n;$("dialogueText").textContent=s.d;
+ $("characterWrap").dataset.expression=s.face;
+ const choices=$("choices");choices.innerHTML="";
+ $("dialogueArea").classList.toggle("has-choices",!!s.choices);
+ if(s.choices){s.choices.forEach(([label,next])=>{const b=document.createElement("button");b.className="choice";b.textContent=label;b.onclick=e=>{e.stopPropagation();draw(next)};choices.appendChild(b)})}
+ $("continueHint").style.display=s.choices?"none":"block";
+ if(key==="finish"){$("dialogueText").textContent="✉ One new message · From Mira · Open when you're ready."}
+}
+function advance(){if(!started)return;const s=scenes[current];if(!s)return;if(s.choices)return;if(s.next)draw(s.next);else if(current==="intro")draw("meet")}
+$("startBtn").onclick=()=>{$("titleScreen").style.display="none";started=true;draw("intro")};
+$("dialogueArea").addEventListener("click",e=>{if(e.target.closest("button"))return;advance()});
+$("autoBtn").onclick=()=>{auto=!auto;$("autoBtn").style.color=auto?"#f4d9a0":"";toast(auto?"Auto mode on":"Auto mode off");if(auto){autoTimer=setInterval(()=>{if(!scenes[current]?.choices)advance()},4500)}else clearInterval(autoTimer)};
+$("saveBtn").onclick=()=>{try{localStorage.setItem("moonlit24-save",JSON.stringify({current,started}));toast("Progress saved")}catch(e){toast("Save is unavailable in this browser")}};
+$("menuBtn").onclick=()=>$("pausePanel").style.display="flex";
+$("resumeBtn").onclick=$("menuBackBtn").onclick=()=>$("pausePanel").style.display="none";
+$("quickSaveBtn").onclick=()=>{ $("saveBtn").click();$("pausePanel").style.display="none"};
+$("restartBtn").onclick=()=>{ $("pausePanel").style.display="none";$("titleScreen").style.display="flex";started=false;current="intro";toast("Story restarted")};
+$("menuBackBtn").onclick=()=>{$("pausePanel").style.display="none";$("titleScreen").style.display="flex";started=false};
+$("closeLetter").onclick=()=>$("letterPanel").style.display="none";
+function openLetter(){ $("letterText").textContent=letter;$("letterPanel").style.display="flex"}
+const originalDraw=draw;
+draw=function(key){if(key==="letter"){openLetter();return}originalDraw(key)};
+$("bgMusic").volume=.35;
+$("musicBtn").onclick=async()=>{const a=$("bgMusic");if(a.paused){try{await a.play();$("musicBtn").textContent="♫ MUSIC ON";toast("Music on")}catch(e){toast("Add assets/sweater-weather.mp3 to enable music")}}else{a.pause();$("musicBtn").textContent="♫ MUSIC";toast("Music off")}};
+$("autoBtn").title="Automatically advance narration";
+$("saveBtn").title="Save your current scene in this browser";
+$("menuBtn").title="Open game menu";
+try{const saved=localStorage.getItem("moonlit24-save");if(saved){const data=JSON.parse(saved);const b=document.createElement("button");b.className="tool";b.textContent="CONTINUE SAVED";b.onclick=()=>{$("titleScreen").style.display="none";started=true;draw(data.current||"intro")};$("menuBtn").before(b)}}catch(e){}
+</script>
+</body>
+</html>
