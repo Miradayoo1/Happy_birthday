@@ -1,19 +1,14 @@
 MOONLIT CHAPTER 24 — GitHub Pages
 
-This is a single-page visual novel with:
-- Full-screen scene composition and responsive mobile layout
-- Layered night-sky backgrounds, moon, stars and silhouette scenery
-- Character sprite with transparent background, positioned as a scene character rather than a small portrait card
-- Branching choices, scene labels, character reactions, birthday letter
-- Auto mode, save progress in browser, menu and restart
+The game now includes 24 separate transparent PNG character-expression sprites in assets/expressions/. The sprite changes automatically with the scene/dialogue. Assets include neutral, smile, happy, teasing, sarcastic, angry, annoyed, embarrassed, surprised, worried, sad, curious, laughing_teasing, pout, sleepy, shy, confident, in_love, scared, disgusted, thinking, tired, grin, and hurt.
 
 PUBLISH
-1. Upload index.html and the assets folder to a GitHub repository.
-2. Repository Settings → Pages.
-3. Deploy from a branch → main → /(root) → Save.
+1. Upload index.html and the entire assets folder to the root of your GitHub repository.
+2. Go to Settings → Pages.
+3. Select Deploy from a branch → main → /(root) → Save.
 
 MUSIC
-The game has a music audio element pointing to assets/sweater-weather.mp3. Add a copy you are legally allowed to use at that exact path. Copyrighted music is not included in this ZIP.
+To enable music, place a music file you are legally allowed to use at assets/sweater-weather.mp3. The game includes a music toggle. The copyrighted song is not bundled in this ZIP.
 
-NOTE
-The supplied character art is a single illustration. Reactions currently use visual styling; true facial-expression changes require distinct expression artwork.
+NOTES
+This is a browser-based visual novel. It includes scene backgrounds, branching dialogue, character expression swaps, save progress, auto mode, menu, and a birthday letter.
